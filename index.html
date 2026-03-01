@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:image" content="LINK_TO_A_PHOTO_OF_YOU.jpg">
-    <meta property="og:title" content="You're Invited to Our Wedding!">
     <title>Michel & Lynn's Wedding</title>
     <style>
         :root {
             --gold: #c5a059;
             --off-white: #fdfcf8;
             --dark-text: #4a4a4a;
+            --red-wax: #a30000;
         }
 
         body {
@@ -29,44 +28,50 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #fff;
+            background: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            z-index: 9999; /* Ensures it is on top of everything */
+            transition: opacity 0.8s ease;
         }
 
         .wax-seal {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, #d40000 0%, #8b0000 100%);
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle, #d40000 0%, var(--red-wax) 100%);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 4px solid #a30000;
-            transition: transform 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border: 4px solid #8b0000;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 10000;
         }
 
-        .wax-seal:hover { transform: scale(1.1); }
+        /* Animation when clicking */
+        .wax-seal:active {
+            transform: scale(0.9);
+        }
 
         /* --- MAIN CONTENT --- */
         .content {
             padding: 40px 20px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 1.1s ease;
-            display: none;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+            display: none; /* Hidden until opened */
         }
 
         .show-content {
-            display: block;
+            display: block !important;
             opacity: 1;
             transform: translateY(0);
         }
@@ -78,7 +83,7 @@
         .countdown {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             margin: 30px 0;
         }
 
@@ -86,29 +91,29 @@
             background: white;
             padding: 10px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            min-width: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            min-width: 65px;
         }
 
-        .time-box span { display: block; font-size: 1.5rem; font-weight: bold; }
-        .time-label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
+        .time-box span { display: block; font-size: 1.4rem; font-weight: bold; color: var(--gold); }
+        .time-label { font-size: 0.65rem; text-transform: uppercase; color: #999; }
 
-        /* --- RSVP FORM --- */
+        /* --- RSVP SECTION --- */
         .rsvp-section {
             background: white;
             padding: 30px;
             margin: 40px auto;
-            max-width: 400px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            max-width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         input, select, button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 1px solid #eee;
+            border-radius: 10px;
             box-sizing: border-box;
             font-size: 16px;
         }
@@ -119,24 +124,24 @@
             border: none;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
         }
 
-        button:disabled { background-color: #ccc; }
-
-        .hidden { display: none !important; }
+        .hidden-overlay {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
     </style>
 </head>
 <body>
 
     <div id="envelope-overlay">
-        <div class="wax-seal" onclick="openInvite()">
+        <div class="wax-seal" onclick="openInvite()" ontouchstart="openInvite()">
             Love
         </div>
     </div>
 
     <div class="content" id="main-content">
-        <p>WE ARE GETTING MARRIED</p>
+        <p style="letter-spacing: 2px;">WE ARE GETTING MARRIED</p>
         <h1>Michel & Lynn</h1>
         <p class="date">Saturday, August 8, 2026</p>
 
@@ -147,83 +152,82 @@
             <div class="time-box"><span id="secs">00</span><div class="time-label">Secs</div></div>
         </div>
 
-        <hr style="width: 50%; border: 0.5px solid #eee; margin: 40px auto;">
+        <hr style="width: 40%; border: 0.5px solid #ddd; margin: 40px auto;">
 
-        <h3>Wedding Day</h3>
+        <h3>The Ceremony</h3>
         <p><strong>Notre Dame Church</strong><br>6:00 PM</p>
+        
+        <h3>The Party</h3>
         <p><strong>Chateau Rweiss</strong><br>7:30 PM</p>
 
         <div class="rsvp-section">
-            <h3>Will you be joining us?</h3>
+            <h3 style="color: var(--gold);">RSVP</h3>
+            <p style="font-size: 0.9rem;">Kindly respond by July 1st</p>
             <form id="rsvpForm">
-                <input type="text" name="Name" placeholder="Your Name" required>
+                <input type="text" name="Name" placeholder="Full Name" required>
                 <select name="Guests">
-                    <option value="1">1 Guest</option>
-                    <option value="2">2 Guests</option>
-                    <option value="3">3 Guests</option>
-                    <option value="4">4 Guests</option>
+                    <option value="1">1 Person</option>
+                    <option value="2">2 People</option>
+                    <option value="3">3 People</option>
                 </select>
-                <button type="submit" id="submitBtn">SUBMIT RSVP</button>
+                <button type="submit" id="submitBtn">CONFIRM ATTENDANCE</button>
             </form>
-            <div id="successMessage" style="display:none; color: #c5a059; font-weight: bold; margin-top: 10px;">
-                Thank you! Your RSVP has been received.
+            <div id="successMessage" style="display:none; color: var(--gold); font-weight: bold; margin-top: 15px;">
+                We can't wait to celebrate with you!
             </div>
         </div>
     </div>
 
     <script>
-        // 1. Function to "Open" the envelope
+        // 1. Fixed Open Logic
         function openInvite() {
             const overlay = document.getElementById('envelope-overlay');
             const content = document.getElementById('main-content');
             
-            overlay.style.opacity = '0';
-            content.style.display = 'block';
+            // Start the fade out
+            overlay.classList.add('hidden-overlay');
             
+            // Show the main content after a small delay
             setTimeout(() => {
-                overlay.classList.add('hidden');
                 content.classList.add('show-content');
-            }, 800);
+                overlay.style.display = 'none';
+            }, 600);
         }
 
-        // 2. Countdown Timer Logic
+        // 2. Countdown Logic
         const weddingDate = new Date("August 8, 2026 18:00:00").getTime();
-
-        setInterval(function() {
+        function updateTimer() {
             const now = new Date().getTime();
             const diff = weddingDate - now;
+            if (diff < 0) return;
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById("days").innerHTML = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerHTML = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("mins").innerHTML = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("secs").innerHTML = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
-            document.getElementById("days").innerHTML = d;
-            document.getElementById("hours").innerHTML = h;
-            document.getElementById("mins").innerHTML = m;
-            document.getElementById("secs").innerHTML = s;
-        }, 1000);
-
-        // 3. RSVP Submission to Google Sheets
+        // 3. RSVP Submission
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyFW74RzIz_TZGMtAzzcWq6umbdZWFwVakmiyIgmoaLeXw7NNvyGvs4-PydCHrjSDdR/exec';
         const form = document.getElementById('rsvpForm');
-        const btn = document.getElementById('submitBtn');
-        const msg = document.getElementById('successMessage');
-
+        
         form.addEventListener('submit', e => {
             e.preventDefault();
+            const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerHTML = "Sending...";
+            btn.innerHTML = "Saving...";
             
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                 .then(response => {
                     form.style.display = "none";
-                    msg.style.display = "block";
+                    document.getElementById('successMessage').style.display = "block";
                 })
                 .catch(error => {
                     btn.disabled = false;
-                    btn.innerHTML = "Error! Try again.";
-                    console.error('Error!', error.message);
+                    btn.innerHTML = "Try Again";
+                    alert("Error saving RSVP. Please try again!");
                 });
         });
     </script>
