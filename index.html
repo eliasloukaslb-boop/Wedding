@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michel & Lynn's Wedding</title>
+    <style>
+        :root {
+            --gold: #c5a059;
+            --off-white: #fdfcf8;
+            --dark-text: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: var(--off-white);
+            color: var(--dark-text);
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* --- WAX SEAL OVERLAY --- */
+        #envelope-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .wax-seal {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, #d40000 0%, #8b0000 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 4px solid #a30000;
+            transition: transform 0.3s ease;
+        }
+
+        .wax-seal:hover { transform: scale(1.1); }
+
+        /* --- MAIN CONTENT --- */
+        .content {
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+
+        .show-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--gold); }
+        .date { font-style: italic; margin-bottom: 30px; }
+
+        /* --- COUNTDOWN --- */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .time-box {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-width: 60px;
+        }
+
+        .time-box span { display: block; font-size: 1.5rem; font-weight: bold; }
+        .time-label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
+
+        /* --- RSVP FORM --- */
+        .rsvp-section {
+            background: white;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--gold);
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .hidden { display: none; visibility: hidden; }
+    </style>
+</head>
+<body>
+
+    <div id="envelope-overlay">
+        <div class="wax-seal" onclick="openInvite()">
+            Love
+        </div>
+    </div>
+
+    <div class="content" id="main-content">
+        <p>WE ARE GETTING MARRIED</p>
+        <h1>Michel & Lynn</h1>
+        <p class="date">Saturday, August 8, 2026</p>
+
+        <div class="countdown" id="timer">
+            <div class="time-box"><span id="days">00</span><div class="time-label">Days</div></div>
+            <div class="time-box"><span id="hours">00</span><div class="time-label">Hours</div></div>
+            <div class="time-box"><span id="mins">00</span><div class="time-label">Mins</div></div>
+            <div class="time-box"><span id="secs">00</span><div class="time-label">Secs</div></div>
+        </div>
+
+        <hr style="width: 50%; border: 0.5px solid #eee; margin: 40px auto;">
+
+        <h3>Wedding Day</h3>
+        <p><strong>Notre Dame Church</strong><br>6:00 PM</p>
+        <p><strong>Chateau Rweiss</strong><br>7:30 PM</p>
+
+        <div class="rsvp-section">
+            <h3>Will you be joining us?</h3>
+            <form id="rsvpForm">
+                <input type="text" placeholder="Your Name" required>
+                <select>
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
+                </select>
+                <button type="submit">SUBMIT RSVP</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to "Open" the envelope
+        function openInvite() {
+            document.getElementById('envelope-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('envelope-overlay').classList.add('hidden');
+                document.getElementById('main-content').classList.add('show-content');
+            }, 800);
+        }
+
+        // Countdown Timer Logic
+        const weddingDate = new Date("August 8, 2026 18:00:00").getTime();
+
+        setInterval(function() {
+            const now = new Date().getTime();
+            const diff = weddingDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = d;
+            document.getElementById("hours").innerHTML = h;
+            document.getElementById("mins").innerHTML = m;
+            document.getElementById("secs").innerHTML = s;
+        }, 1000);
+
+        // RSVP Submission
+        document.getElementById('rsvpForm').onsubmit = function(e) {
+            e.preventDefault();
+            alert("Thank you! Your RSVP has been sent.");
+        };
+        
+        <div class="rsvp-section">
+    <h3>Will you be joining us?</h3>
+    <form id="rsvpForm">
+        <input type="text" name="Name" placeholder="Your Name" required>
+        <select name="Guests">
+            <option value="1">1 Guest</option>
+            <option value="2">2 Guests</option>
+            <option value="3">3 Guests</option>
+        </select>
+        <button type="submit" id="submitBtn">SUBMIT RSVP</button>
+    </form>
+    <div id="successMessage" style="display:none; color: green; margin-top: 10px;">
+        Thank you! Your RSVP has been received.
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyFW74RzIz_TZGMtAzzcWq6umbdZWFwVakmiyIgmoaLeXw7NNvyGvs4-PydCHrjSDdR/exec' // PASTE YOUR SCRIPT URL HERE
+    const form = document.getElementById('rsvpForm')
+    const btn = document.getElementById('submitBtn')
+    const msg = document.getElementById('successMessage')
+
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+        btn.disabled = true
+        btn.innerHTML = "Sending..."
+        
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                form.style.display = "none"
+                msg.style.display = "block"
+            })
+            .catch(error => {
+                btn.disabled = false
+                btn.innerHTML = "Error! Try again."
+                console.error('Error!', error.message)
+            })
+    })
+</script>
+    </script>
+    
+    
+</body>
+</html>
