@@ -59,10 +59,12 @@
             padding: 40px 20px;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 1s ease;
+            transition: all 1.1s ease;
+            display: none;
         }
 
         .show-content {
+            display: block;
             opacity: 1;
             transform: translateY(0);
         }
@@ -106,6 +108,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             box-sizing: border-box;
+            font-size: 16px;
         }
 
         button {
@@ -114,9 +117,12 @@
             border: none;
             font-weight: bold;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
-        .hidden { display: none; visibility: hidden; }
+        button:disabled { background-color: #ccc; }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -148,28 +154,37 @@
         <div class="rsvp-section">
             <h3>Will you be joining us?</h3>
             <form id="rsvpForm">
-                <input type="text" placeholder="Your Name" required>
-                <select>
+                <input type="text" name="Name" placeholder="Your Name" required>
+                <select name="Guests">
                     <option value="1">1 Guest</option>
                     <option value="2">2 Guests</option>
                     <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
                 </select>
-                <button type="submit">SUBMIT RSVP</button>
+                <button type="submit" id="submitBtn">SUBMIT RSVP</button>
             </form>
+            <div id="successMessage" style="display:none; color: #c5a059; font-weight: bold; margin-top: 10px;">
+                Thank you! Your RSVP has been received.
+            </div>
         </div>
     </div>
 
     <script>
-        // Function to "Open" the envelope
+        // 1. Function to "Open" the envelope
         function openInvite() {
-            document.getElementById('envelope-overlay').style.opacity = '0';
+            const overlay = document.getElementById('envelope-overlay');
+            const content = document.getElementById('main-content');
+            
+            overlay.style.opacity = '0';
+            content.style.display = 'block';
+            
             setTimeout(() => {
-                document.getElementById('envelope-overlay').classList.add('hidden');
-                document.getElementById('main-content').classList.add('show-content');
+                overlay.classList.add('hidden');
+                content.classList.add('show-content');
             }, 800);
         }
 
-        // Countdown Timer Logic
+        // 2. Countdown Timer Logic
         const weddingDate = new Date("August 8, 2026 18:00:00").getTime();
 
         setInterval(function() {
@@ -187,53 +202,28 @@
             document.getElementById("secs").innerHTML = s;
         }, 1000);
 
-        // RSVP Submission
-        document.getElementById('rsvpForm').onsubmit = function(e) {
+        // 3. RSVP Submission to Google Sheets
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyFW74RzIz_TZGMtAzzcWq6umbdZWFwVakmiyIgmoaLeXw7NNvyGvs4-PydCHrjSDdR/exec';
+        const form = document.getElementById('rsvpForm');
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('successMessage');
+
+        form.addEventListener('submit', e => {
             e.preventDefault();
-            alert("Thank you! Your RSVP has been sent.");
-        };
-        
-        <div class="rsvp-section">
-    <h3>Will you be joining us?</h3>
-    <form id="rsvpForm">
-        <input type="text" name="Name" placeholder="Your Name" required>
-        <select name="Guests">
-            <option value="1">1 Guest</option>
-            <option value="2">2 Guests</option>
-            <option value="3">3 Guests</option>
-        </select>
-        <button type="submit" id="submitBtn">SUBMIT RSVP</button>
-    </form>
-    <div id="successMessage" style="display:none; color: green; margin-top: 10px;">
-        Thank you! Your RSVP has been received.
-    </div>
-</div>
-
-<script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyFW74RzIz_TZGMtAzzcWq6umbdZWFwVakmiyIgmoaLeXw7NNvyGvs4-PydCHrjSDdR/exec' // PASTE YOUR SCRIPT URL HERE
-    const form = document.getElementById('rsvpForm')
-    const btn = document.getElementById('submitBtn')
-    const msg = document.getElementById('successMessage')
-
-    form.addEventListener('submit', e => {
-        e.preventDefault()
-        btn.disabled = true
-        btn.innerHTML = "Sending..."
-        
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                form.style.display = "none"
-                msg.style.display = "block"
-            })
-            .catch(error => {
-                btn.disabled = false
-                btn.innerHTML = "Error! Try again."
-                console.error('Error!', error.message)
-            })
-    })
-</script>
+            btn.disabled = true;
+            btn.innerHTML = "Sending...";
+            
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    form.style.display = "none";
+                    msg.style.display = "block";
+                })
+                .catch(error => {
+                    btn.disabled = false;
+                    btn.innerHTML = "Error! Try again.";
+                    console.error('Error!', error.message);
+                });
+        });
     </script>
-    
-    
 </body>
 </html>
